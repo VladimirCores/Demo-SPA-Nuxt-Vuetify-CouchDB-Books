@@ -9,12 +9,14 @@ export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
   const url = config.public.DATA_SOURCE_URL;
   const port = config.public.DATA_SOURCE_PORT;
+  const databases = new Map<string, any>();
   return {
     name: 'pouchdb',
     parallel: true,
     provide: {
-      connect: (db:string, isLocal = false) => new PouchDB(
-        isLocal ? db : `${url}:${port}/${db}`, { skip_setup: true }),
+      connect: (db:string, isLocal = false): any => {
+        if (databases.has(db)) { return databases.get(db); } else { return (databases.set(db, new PouchDB(isLocal ? db : `${url}:${port}/${db}`, { skip_setup: true })), databases.get(db)); }
+      },
     },
   };
 },
