@@ -20,6 +20,7 @@
     "vite-plugin-vuetify": "^1.0.2"
   },
   "dependencies": {
+    "@mdi/font": "^7.2.96",
     "sass": "^1.64.0",
     "vuetify": "^3.3.9"
   }

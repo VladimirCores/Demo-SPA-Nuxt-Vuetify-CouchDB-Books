@@ -1,8 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify from 'vite-plugin-vuetify';
+
 export default defineNuxtConfig({
   telemetry: false,
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: [
     '@nuxtjs/eslint-module',
     async(_, nuxt) => {
@@ -12,7 +13,10 @@ export default defineNuxtConfig({
         });
     },
   ],
-  css: ['vuetify/lib/styles/main.sass'],
+  css: [
+    'vuetify/lib/styles/main.sass',
+    '@mdi/font/css/materialdesignicons.min.css',
+  ],
   build: {
     transpile: ['vuetify'],
   },

@@ -6,7 +6,8 @@
         elevation="0"
         :border="true"
       />
-      <v-main class="d-flex align-center justify-center" style="min-height: 300px;">
+      <v-main class="d-flex align-center justify-center" style="min-height: 100vh;">
+        <v-icon icon="mdi-home" />
         Main Content
       </v-main>
     </v-layout>
