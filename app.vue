@@ -14,5 +14,8 @@
   </div>
 </template>
 <script setup lang="ts">
-
+const { $connect } = useNuxtApp();
+// import Providers from '~/constants/providers';
+// const DB = inject(Providers.DB);
+console.log($connect('settings'));
 </script>
