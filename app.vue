@@ -1,21 +1,18 @@
 <template>
-  <div>
-    <v-layout class="rounded rounded-md">
-      <v-app-bar
-        title="Application bar"
-        elevation="0"
-        :border="true"
-      />
-      <v-main class="d-flex align-center justify-center" style="min-height: 100vh;">
-        <v-icon icon="mdi-home" />
-        Main Content
-      </v-main>
-    </v-layout>
-  </div>
+  <NuxtLayout>
+    <NuxtPage v-if="isUserExists" />
+    <div
+      v-else
+      class="d-flex justify-center align-center"
+      style="min-height: 100vh;"
+    >
+      <span class="text-blue text-2xl">
+        Только для авторизованных пользователей
+      </span>
+    </div>
+  </NuxtLayout>
 </template>
 <script setup lang="ts">
-const { $connect } = useNuxtApp();
-// import Providers from '~/constants/providers';
-// const DB = inject(Providers.DB);
-console.log($connect('settings'));
+const { isExist: isUserExists } = useUser();
+console.log(`> App -> $user.isExist = ${isUserExists.value}`);
 </script>
