@@ -1,10 +1,6 @@
 <template>
   <v-layout class="rounded rounded-md">
-    <v-app-bar
-      title="GEOM - ЦИФРОВОЙ ГТМ"
-      elevation="0"
-      :border="true"
-    />
+    <Header />
     <v-main>
       <slot />
     </v-main>
