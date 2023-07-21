@@ -13,6 +13,6 @@
   </NuxtLayout>
 </template>
 <script setup lang="ts">
-const { isExist: isUserExists } = useUser();
+const { isExists: isUserExists } = useUser();
 console.log(`> App -> $user.isExist = ${isUserExists.value}`);
 </script>
