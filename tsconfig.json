@@ -5,7 +5,8 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "types": [
-       "vitest/importMeta"
+      "vitest/importMeta",
+      "vuetify"
     ]
   }
 }
