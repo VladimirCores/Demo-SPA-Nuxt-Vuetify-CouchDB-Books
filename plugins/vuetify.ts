@@ -4,6 +4,7 @@ import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import { md2 } from 'vuetify/blueprints';
 import { aliases, mdi } from 'vuetify/iconsets/mdi';
+// @ts-ignore
 import colors from 'vuetify/lib/util/colors';
 
 export default defineNuxtPlugin((nuxtApp) => {

@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout>
-    <NuxtPage v-if="isUserExists" />
+    <NuxtPage v-if="canRenderPages" />
     <div
       v-else
       class="d-flex justify-center align-center"
@@ -13,6 +13,11 @@
   </NuxtLayout>
 </template>
 <script setup lang="ts">
+import Routes from '~/constants/Routes';
+
+const { currentRoute } = useRouter();
 const { isExists: isUserExists } = useUser();
+
+const canRenderPages = computed(() => isUserExists.value || currentRoute.value.path === Routes.LOGIN.path);
 console.log(`> App -> $user.isExist = ${isUserExists.value}`);
 </script>
