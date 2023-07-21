@@ -1,24 +1,31 @@
 <template>
-  <div class="d-flex justify-center align-center" style="min-height: 80vh;">
+  <div class="d-flex justify-center align-center" style="min-height: 90vh;">
     <v-sheet width="300">
       <v-form fast-fail @submit.prevent>
         <v-text-field
           v-model="userName"
           variant="outlined"
+          clearable
           label="Имя пользователя"
-          :rules="userNameRules"
+          :rules="[required, userNameRules]"
         />
+
         <v-text-field
           v-model="userPassword"
           variant="outlined"
           label="Пароль"
-          :rules="userPasswordRules"
-          class="mt-2"
+          clearable
+          :type="canShowPassword ? 'text' : 'password'"
+          :append-inner-icon="canShowPassword ? 'mdi-eye-off' : 'mdi-eye'"
+          :rules="[required, userPasswordRules]"
+          class="mt-4 mb-0"
+          @click:append-inner="canShowPassword = !canShowPassword"
         />
         <v-btn
           type="submit"
           block
-          flat
+          variant="tonal"
+          size="large"
           class="mt-4"
         >
           Отправить
@@ -28,20 +35,19 @@
   </div>
 </template>
 <script setup lang="ts">
-const userName = ref('');
-const userNameRules = [
+const canShowPassword = ref<boolean>(false);
+const userName = ref('geom');
+const userNameRules =
   (value: string) => {
     if (value?.length > 3) { return true; }
     return 'Количество символов меньше 4';
-  },
-];
-const userPassword = ref('');
-const userPasswordRules = [
+  };
+const userPassword = ref('987');
+const userPasswordRules =
   (value: string) => {
     if (!/[^0-9]/.test(value) && value?.length > 2) { return true; }
     return 'Пароль меньше 2 чисел';
-  },
-];
+  };
 </script>
 <style scoped>
 </style>
