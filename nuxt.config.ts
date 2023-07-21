@@ -8,10 +8,14 @@ export default defineNuxtConfig({
       DATA_SOURCE_PORT: '',
     },
   },
+  imports: {
+    injectAtEnd: true,
+  },
   telemetry: false,
   ssr: false,
   devtools: { enabled: false },
   modules: [
+    'nuxt-vitest',
     '@nuxtjs/eslint-module',
     async(_, nuxt) => {
       await nuxt.hooks.hook('vite:extendConfig',
