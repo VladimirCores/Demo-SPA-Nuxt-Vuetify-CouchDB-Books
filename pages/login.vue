@@ -1,53 +1,42 @@
 <template>
   <div class="d-flex justify-center align-center" style="min-height: 90vh;">
-    <v-sheet width="300">
-      <v-form fast-fail @submit.prevent>
-        <v-text-field
-          v-model="userName"
-          variant="outlined"
-          clearable
-          label="Имя пользователя"
-          :rules="[required, userNameRules]"
-        />
-
-        <v-text-field
-          v-model="userPassword"
-          variant="outlined"
-          label="Пароль"
-          clearable
-          :type="canShowPassword ? 'text' : 'password'"
-          :append-inner-icon="canShowPassword ? 'mdi-eye-off' : 'mdi-eye'"
-          :rules="[required, userPasswordRules]"
-          class="mt-4 mb-0"
-          @click:append-inner="canShowPassword = !canShowPassword"
-        />
-        <v-btn
-          type="submit"
-          block
-          variant="tonal"
-          size="large"
-          class="mt-4"
-        >
-          Отправить
-        </v-btn>
-      </v-form>
-    </v-sheet>
+    <LoginForm @login="onLogin" />
   </div>
 </template>
 <script setup lang="ts">
-const canShowPassword = ref<boolean>(false);
-const userName = ref('geom');
-const userNameRules =
-  (value: string) => {
-    if (value?.length > 3) { return true; }
-    return 'Количество символов меньше 4';
-  };
-const userPassword = ref('987');
-const userPasswordRules =
-  (value: string) => {
-    if (!/[^0-9]/.test(value) && value?.length > 2) { return true; }
-    return 'Пароль меньше 2 чисел';
-  };
+import Databases from '~/constants/Databases';
+
+const user = useUser();
+const erorrs = ref([]);
+
+const onLogin = (credentials: any) => {
+  const { $connect } = useNuxtApp();
+  console.log('> LoginPage -> onLogin:', credentials);
+  const db = $connect(Databases.SETTINGS);
+
+  db.logIn(credentials.username, credentials.password)
+    .then((response: any) => {
+      console.log('> LoginPage -> onLogin: response =', response);
+      return db.getSession();
+    })
+    .then(({ userCtx: profile }: any) => {
+      console.log('> LoginPage -> onLogin: userCtx =', profile);
+      user.setupProfile(profile);
+    })
+    .catch((error: any) => {
+      // console.log('> LoginPage -> onLogin: err =', error);
+      // // previousAttempts.push(credentials);
+      // if (error) {
+      //   if (error.name === 'unauthorized' || error.name === 'forbidden') {
+      //   // name or password incorrect
+      //     errorMessageName.value = 'Возможно имя неверное!';
+      //     errorMessagePassword.value = 'Или пароль первальный!';
+      //   } else {
+      //   // cosmic rays, a meteor, etc.
+      //   }
+      // }
+    });
+};
 </script>
 <style scoped>
 </style>
