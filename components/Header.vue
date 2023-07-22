@@ -6,9 +6,13 @@
     <v-app-bar-title>
       <div class="flex-row">
         <v-icon icon="mdi-chart-box-outline" color="primary" />
-        <span class="pl-2" style="user-select: none;">
-          GEOM - ЦИФРОВОЙ ГТМ
-        </span>
+        <NuxtLink
+          :to="isNavigateIndexPossible ? '/' : null"
+          class="pl-2"
+          style="text-decoration: none; color: inherit; user-select: none;"
+        >
+          GEOM
+        </NuxtLink>
       </div>
     </v-app-bar-title>
     <HeaderNavigation v-if="isUserExists" />
@@ -30,6 +34,7 @@ import Routes from '~/constants/Routes';
 const { currentRoute } = useRouter();
 const { isExists: isUserExists } = useUser();
 const isButtonLoginDisable = computed<boolean>(() => currentRoute.value.path === Routes.LOGIN.path);
+const isNavigateIndexPossible = computed<boolean>(() => currentRoute.value.path !== Routes.INDEX.path);
 </script>
 
 <style scoped>

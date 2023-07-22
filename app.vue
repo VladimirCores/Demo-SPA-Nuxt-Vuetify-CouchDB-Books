@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <NuxtLayout>
-      <NuxtPage v-if="canRenderPages" />
+      <NuxtPage v-if="isNavigationAllowed" />
       <div
         v-else
         class="d-flex justify-center align-center"
@@ -16,11 +16,6 @@
   </v-app>
 </template>
 <script setup lang="ts">
-import Routes from '~/constants/Routes';
-
-const { currentRoute } = useRouter();
-const { isExists: isUserExists } = useUser();
-
-const canRenderPages = computed(() => isUserExists.value || currentRoute.value.path === Routes.LOGIN.path);
-console.log(`> App -> $user.isExist = ${isUserExists.value}`);
+const { isNavigationAllowed } = useNavigator();
+console.log(`> App -> isNavigationAllowed = ${isNavigationAllowed.value}`);
 </script>
