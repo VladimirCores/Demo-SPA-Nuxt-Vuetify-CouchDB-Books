@@ -13,6 +13,7 @@
       :key="link"
       :to="link.path"
       variant="text"
+      color="primary"
     >
       {{ link.title }}
     </v-tab>
