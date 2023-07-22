@@ -34,7 +34,7 @@ import Routes from '~/constants/Routes';
 const { currentRoute } = useRouter();
 const { isExists: isUserExists } = useUser();
 const isButtonLoginDisable = computed<boolean>(() => currentRoute.value.path === Routes.LOGIN.path);
-const isNavigateIndexPossible = computed<boolean>(() => currentRoute.value.path !== Routes.INDEX.path);
+const isNavigateIndexPossible = computed<boolean>(() => !isUserExists.value && currentRoute.value.path !== Routes.INDEX.path);
 </script>
 
 <style scoped>

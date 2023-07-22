@@ -1,21 +1,15 @@
 <template>
   <v-app>
     <NuxtLayout>
-      <NuxtPage v-if="isNavigationAllowed" />
-      <div
-        v-else
-        class="d-flex justify-center align-center"
-        style="min-height: 100vh;"
-      >
-        <span class="text-primary text-h4">
-          Только для авторизованных пользователей
-        </span>
-      </div>
+      <NuxtPage v-if="isPagesNavigationAllowed" />
+      <MessageOnlyLoginUsers v-else />
     </NuxtLayout>
     <Breadcrumbs />
   </v-app>
 </template>
 <script setup lang="ts">
-const { isNavigationAllowed } = useNavigator();
-console.log(`> App -> isNavigationAllowed = ${isNavigationAllowed.value}`);
+import MessageOnlyLoginUsers from '~/components/messages/MessageOnlyLoginUsers.vue';
+
+const { isPagesNavigationAllowed } = useNavigator();
+console.log(`> App -> isNavigationAllowed = ${isPagesNavigationAllowed.value}`);
 </script>

@@ -4,8 +4,12 @@ export default function() {
   const { isExists: isUserExists } = useUser();
   const { currentRoute } = useRouter();
   return ({
-    get isNavigationAllowed() {
-      return computed(() => isUserExists.value || currentRoute.value.path === Routes.LOGIN.path);
+    get isPagesNavigationAllowed() {
+      return computed(() => {
+        const whenAuth = isUserExists.value;
+        const whenNotAuthOnLoginPage = !isUserExists.value && Routes.LOGIN.path === currentRoute.value.path;
+        return whenAuth || whenNotAuthOnLoginPage;
+      });
     },
   });
 }

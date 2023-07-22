@@ -4,6 +4,7 @@
       <v-text-field
         v-model="userName"
         variant="outlined"
+        :disabled="isLoading"
         clearable
         :error-messages="errorMessageName"
         label="Имя пользователя"
@@ -14,6 +15,7 @@
         v-model="userPassword"
         variant="outlined"
         label="Пароль"
+        :disabled="isLoading"
         clearable
         :error-messages="errorMessagePassword"
         :type="canShowPassword ? 'text' : 'password'"
@@ -28,6 +30,7 @@
         variant="tonal"
         size="large"
         class="mt-4"
+        :loading="isLoading"
         @click="onLogin"
       >
         Отправить
@@ -37,12 +40,13 @@
 </template>
 
 <script setup lang="ts">
+const props = defineProps<{errors?: string, isLoading?: boolean}>();
 const emits = defineEmits(['login']);
 
 const canShowPassword = ref<boolean>(false);
 
-const errorMessageName = ref<string>('');
-const errorMessagePassword = ref<string>('');
+const errorMessageName = computed<string>(() => props.errors ? 'Возможно имя неверное' : '');
+const errorMessagePassword = computed<string>(() => props.errors ? 'Или пароль неправельный' : '');
 
 // const previousAttempts = [];
 
