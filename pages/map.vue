@@ -1,7 +1,7 @@
-<template>
+index.vue<template>
   <div class="d-flex justify-center align-center h-screen">
     <v-icon icon="mdi-home" />
-    Main Content
+    Map
   </div>
 </template>
 <script setup lang="ts">

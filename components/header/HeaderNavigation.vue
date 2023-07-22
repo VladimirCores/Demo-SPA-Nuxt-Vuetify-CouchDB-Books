@@ -5,19 +5,22 @@
   >
     <v-tab
       v-for="link in [
-        'Dashboard',
-        'Messages',
-        'Profile',
-        'Updates',
+        Routes.DASHBOARD,
+        Routes.LIBRARY,
+        Routes.REPORTS,
+        Routes.MAP,
       ]"
       :key="link"
+      :to="link.path"
+      variant="text"
     >
-      {{ link }}
+      {{ link.title }}
     </v-tab>
   </v-tabs>
 </template>
 
 <script setup lang="ts">
+import Routes from '~/constants/Routes';
 </script>
 
 <style scoped>
