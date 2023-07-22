@@ -19,13 +19,16 @@
     <v-spacer />
     <v-btn
       v-if="!isUserExists"
-      :disabled="isButtonLoginDisable"
+      :disabled="isButtonLoginDisabled"
       :to="Routes.LOGIN"
       variant="outlined"
     >
       Логин
     </v-btn>
-    <HeaderUserProfile v-else />
+    <template v-else>
+      <HeaderUserProfile />
+      <HeaderActionMenu />
+    </template>
   </v-app-bar>
 </template>
 
@@ -33,7 +36,7 @@
 import Routes from '~/constants/Routes';
 const { currentRoute } = useRouter();
 const { isExists: isUserExists } = useUser();
-const isButtonLoginDisable = computed<boolean>(() => currentRoute.value.path === Routes.LOGIN.path);
+const isButtonLoginDisabled = computed<boolean>(() => currentRoute.value.path === Routes.LOGIN.path);
 const isNavigateIndexPossible = computed<boolean>(() => !isUserExists.value && currentRoute.value.path !== Routes.INDEX.path);
 </script>
 
