@@ -27,7 +27,7 @@
     </v-btn>
     <template v-else>
       <HeaderUserProfile />
-      <HeaderActionMenu />
+      <HeaderActionMenu @logout="onLogout" />
     </template>
   </v-app-bar>
 </template>
@@ -35,9 +35,15 @@
 <script setup lang="ts">
 import Routes from '~/constants/Routes';
 const { currentRoute } = useRouter();
-const { isExists: isUserExists } = useUser();
+const { isExists: isUserExists, resetProfile } = useUser();
 const isButtonLoginDisabled = computed<boolean>(() => currentRoute.value.path === Routes.LOGIN.path);
 const isNavigateIndexPossible = computed<boolean>(() => !isUserExists.value && currentRoute.value.path !== Routes.INDEX.path);
+
+const onLogout = () => {
+  console.log('> Header -> onLogout');
+  useNuxtApp().$connect().logOut()
+    .then(() => resetProfile());
+};
 </script>
 
 <style scoped>

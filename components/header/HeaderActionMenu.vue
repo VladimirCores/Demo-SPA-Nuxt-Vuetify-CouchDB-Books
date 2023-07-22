@@ -10,7 +10,7 @@
     <v-list density="compact" :lines="false">
       <v-list-item
         v-for="(item, i) in [
-          { text: 'Выйти', icon: 'mdi-exit-to-app' },
+          { text: 'Выйти', icon: 'mdi-exit-to-app', onClick: onLogoutClick },
         ]"
         :key="i"
         :value="item"
@@ -20,7 +20,7 @@
           <v-icon :icon="item.icon" />
         </template>
 
-        <v-list-item-title>
+        <v-list-item-title @click="item.onClick">
           {{ item.text }}
         </v-list-item-title>
       </v-list-item>
@@ -29,6 +29,8 @@
 </template>
 
 <script setup lang="ts">
+const emits = defineEmits(['logout']);
+const onLogoutClick = () => emits('logout');
 </script>
 
 <style scoped>
