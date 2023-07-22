@@ -1,7 +1,7 @@
 const INDEX = { path: '/', title: 'Главная' };
 const LOGIN = { path: '/login', title: 'Логин' };
 const DASHBOARD = { path: '/', title: 'Дашборд' };
-const LIBRARY = { path: '/library', title: 'Справочники' };
+const LIBRARY = { path: '/books', title: 'Книги' };
 const REPORTS = { path: '/reports', title: 'Отчеты' };
 const MAP = { path: '/map', title: 'Карта' };
 
