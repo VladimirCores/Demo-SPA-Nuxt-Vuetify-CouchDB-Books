@@ -14,7 +14,7 @@ export default defineNuxtPlugin(() => {
     name: 'pouchdb',
     parallel: true,
     provide: {
-      connect: (db:string, isLocal = false): any => {
+      connect: (db = '', isLocal = false): any => {
         if (databases.has(db)) { return databases.get(db); } else { return (databases.set(db, new PouchDB(isLocal ? db : `${url}:${port}/${db}`, { skip_setup: true })), databases.get(db)); }
       },
     },
