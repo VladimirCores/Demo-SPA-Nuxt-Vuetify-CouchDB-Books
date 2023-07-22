@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import Databases from '~/constants/Databases';
 import LoginForm from '~/components/pages/login/LoginForm.vue';
-import LogonSuccess from '~/components/pages/login/LogonSuccess.vue';
+import LogonSuccess from '~/components/pages/login/LoginSuccess.vue';
 
 const { isExists: isUserExists, setupProfile } = useUser();
 
