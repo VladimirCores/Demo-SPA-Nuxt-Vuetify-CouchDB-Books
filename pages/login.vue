@@ -29,9 +29,14 @@ const onLogin = (credentials: any) => {
       console.log('> LoginPage -> onLogin: response =', response);
       return db.getSession();
     })
-    .then(({ userCtx: profile }: any) => {
-      console.log('> LoginPage -> onLogin: userCtx =', profile);
-      setupProfile(profile);
+    .then((session: any) => {
+      const { userCtx: user, info } = session;
+      console.log('> LoginPage -> onLogin: userCtx =', session.userCtx);
+      // db.authenticate(credentials, user);
+      if (info.authenticated) {
+        return db.getUser(user.name)
+          .then(setupProfile);
+      }
     })
     .catch((error: any) => {
       console.log('> LoginPage -> onLogin: err =', error);
