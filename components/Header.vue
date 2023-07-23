@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import Routes from '~/constants/Routes';
-const { currentRoute } = useRouter();
+const { currentRoute, replace } = useRouter();
 const { isExists: isUserExists, resetProfile: resetUserProfile } = useUser();
 const isButtonLoginDisabled = computed<boolean>(() => currentRoute.value.path === Routes.LOGIN.path);
 const isNavigateIndexPossible = computed<boolean>(() => !isUserExists.value && currentRoute.value.path !== Routes.INDEX.path);
@@ -44,7 +44,8 @@ const onLogout = () => {
   useNuxtApp()
     .$connect()
     .logOut()
-    .then(resetUserProfile);
+    .then(resetUserProfile)
+    .then(replace(Routes.INDEX));
 };
 </script>
 
