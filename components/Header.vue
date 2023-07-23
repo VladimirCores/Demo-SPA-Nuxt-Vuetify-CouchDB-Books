@@ -45,6 +45,7 @@ const onLogout = () => {
     .$connect()
     .logOut()
     .then(resetUserProfile)
+    .then(clearNuxtState)
     .then(replace(Routes.INDEX));
 };
 </script>
