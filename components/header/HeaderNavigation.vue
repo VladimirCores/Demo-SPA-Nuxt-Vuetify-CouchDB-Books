@@ -6,7 +6,7 @@
     <v-tab
       v-for="link in [
         Routes.DASHBOARD,
-        Routes.LIBRARY,
+        pathToCurrentPage,
         Routes.REPORTS,
         Routes.MAP,
       ]"
@@ -22,6 +22,11 @@
 
 <script setup lang="ts">
 import Routes from '~/constants/Routes';
+const currentPageIndex = useState<number>('booksPage');
+const pathToCurrentPage = computed(() => ({
+  ...Routes.BOOKS,
+  path: `${Routes.BOOKS.path}?page=${currentPageIndex.value ? currentPageIndex.value + 1 : '1'}`,
+}));
 </script>
 
 <style scoped>
