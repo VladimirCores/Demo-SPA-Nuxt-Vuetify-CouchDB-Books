@@ -1,6 +1,6 @@
 index.vue<template>
-  <div class="d-flex justify-center align-center h-screen">
-    <v-icon icon="mdi-home" />
+  <div class="d-flex justify-center align-center h-100">
+    <v-icon icon="mdi-chart-bell-curve" />
     Reports
   </div>
 </template>

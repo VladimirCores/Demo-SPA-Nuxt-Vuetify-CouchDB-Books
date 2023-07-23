@@ -1,7 +1,7 @@
 <template>
-  <div class="d-flex justify-center align-center h-screen">
-    <v-icon icon="mdi-home" />
-    Main Content
+  <div class="d-flex justify-center align-center h-100">
+    <v-icon icon="mdi-view-dashboard-variant" />
+    Dashboards
   </div>
 </template>
 <script setup lang="ts">
