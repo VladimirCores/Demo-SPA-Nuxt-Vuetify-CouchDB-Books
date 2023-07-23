@@ -1,4 +1,4 @@
-import { ALLOWED_PATH_FOR_UNAUTHENTICATED, NOT_ALLOWED_PATH_FOR_AUTHENTICATED } from '~/constants/Routes';
+import Routes, { ALLOWED_PATH_FOR_UNAUTHENTICATED, NOT_ALLOWED_PATH_FOR_AUTHENTICATED } from '~/constants/Routes';
 
 export default defineNuxtRouteMiddleware((to, _) => {
   const user = useUser();
@@ -6,6 +6,6 @@ export default defineNuxtRouteMiddleware((to, _) => {
   console.log('> RouteMiddleware: isUserExists =', isUserExists);
   if ((!isUserExists && !ALLOWED_PATH_FOR_UNAUTHENTICATED.includes(to.path)) ||
     (isUserExists && NOT_ALLOWED_PATH_FOR_AUTHENTICATED.includes(to.path))) {
-    return abortNavigation();
+    return navigateTo(Routes.INDEX);
   }
 });
