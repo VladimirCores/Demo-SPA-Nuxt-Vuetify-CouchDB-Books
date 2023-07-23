@@ -8,7 +8,7 @@ export function useUser():IUser {
     get profile() { return profile; },
     setupProfile: (value: any) => {
       if (!value) { throw new Error('profile can not be setup with null'); }
-      useLocalStorage().store(LocalKeys.PROFILE, JSON.stringify(value));
+      useLocalStorage().store(LocalKeys.PROFILE, value);
       profile.value = value;
     },
     resetProfile: () => {
