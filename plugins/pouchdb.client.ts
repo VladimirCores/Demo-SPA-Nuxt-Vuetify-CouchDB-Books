@@ -1,4 +1,4 @@
-import PouchDB from 'pouchdb-browser';
+import PouchDB from 'pouchdb';
 import PouchFind from 'pouchdb-find';
 import PouchAuth from 'pouchdb-authentication';
 PouchDB
