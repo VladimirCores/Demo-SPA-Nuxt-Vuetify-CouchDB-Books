@@ -31,7 +31,7 @@ const onLogin = (credentials: any) => {
     })
     .then((session: any) => {
       const { userCtx: user, info } = session;
-      console.log('> LoginPage -> onLogin: userCtx =', session.userCtx);
+      console.log('> LoginPage -> onLogin: session =', session);
       // db.authenticate(credentials, user);
       if (info.authenticated) {
         return db.getUser(user.name)
@@ -45,6 +45,10 @@ const onLogin = (credentials: any) => {
       } else if (['unauthorized', 'forbidden'].includes(error.name)) {
         // name or password incorrect
         errors.value = 'unauthorized';
+      } else if (error.name === 'not_found') {
+        db.logOut().then(() => {
+          errors.value = 'not_found';
+        });
       } else {
         // cosmic rays, a meteor, etc.
       }
