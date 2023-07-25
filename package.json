@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "server": "pouchdb-server --port 5984 --dir ./.data",
+    "dev": "yarn server & nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "test:watch": "vitest watch",
@@ -24,6 +25,7 @@
     "nuxt": "^3.6.5",
     "nuxt-vitest": "^0.10.1",
     "pouchdb": "^8.0.1",
+    "pouchdb-server": "^4.2.0",
     "typescript": "4.9.5",
     "vite-plugin-vuetify": "^1.0.2",
     "vitest": "^0.33.0"
