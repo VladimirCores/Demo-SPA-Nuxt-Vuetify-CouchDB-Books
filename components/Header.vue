@@ -11,7 +11,7 @@
           class="pl-2"
           style="text-decoration: none; color: inherit; user-select: none;"
         >
-          GEOM
+          BOOKS
         </NuxtLink>
       </div>
     </v-app-bar-title>
@@ -34,9 +34,10 @@
 
 <script setup lang="ts">
 import Routes from '~/constants/Routes';
+const props = defineProps<{ errors: string[] }>();
 const { currentRoute, replace } = useRouter();
 const { isExists: isUserExists, resetProfile: resetUserProfile } = useUser();
-const isButtonLoginDisabled = computed<boolean>(() => currentRoute.value.path === Routes.LOGIN.path);
+const isButtonLoginDisabled = computed<boolean>(() => currentRoute.value.path === Routes.LOGIN.path || !!props.errors.length);
 const isNavigateIndexPossible = computed<boolean>(() => !isUserExists.value && currentRoute.value.path !== Routes.INDEX.path);
 
 const onLogout = () => {
