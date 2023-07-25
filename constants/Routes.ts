@@ -1,9 +1,9 @@
-const INDEX = { path: '/', title: 'Главная' };
-const LOGIN = { path: '/login', title: 'Логин' };
-const DASHBOARD = { path: '/', title: 'Дашборд' };
-const BOOKS = { path: '/books', title: 'Книги' };
-const REPORTS = { path: '/reports', title: 'Отчеты' };
-const MAP = { path: '/map', title: 'Карта' };
+const INDEX = { path: '/', title: 'Main' };
+const LOGIN = { path: '/login', title: 'Login' };
+const DASHBOARD = { path: '/', title: 'Dashboard' };
+const BOOKS = { path: '/books', title: 'Books' };
+const REPORTS = { path: '/reports', title: 'Reports' };
+const MAP = { path: '/map', title: 'Map' };
 
 const ALL = [INDEX, LOGIN, DASHBOARD, BOOKS, REPORTS, MAP];
 

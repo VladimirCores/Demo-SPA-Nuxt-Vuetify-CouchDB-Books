@@ -7,14 +7,14 @@
         :disabled="isLoading"
         clearable
         :error-messages="errorMessageName"
-        label="Имя пользователя"
+        label="Username"
         :rules="[required, userNameRules]"
       />
 
       <v-text-field
         v-model="userPassword"
         variant="outlined"
-        label="Пароль"
+        label="Password"
         :disabled="isLoading"
         clearable
         :error-messages="errorMessagePassword"
@@ -33,7 +33,7 @@
         :loading="isLoading"
         @click="onLogin"
       >
-        Отправить
+        Send
       </v-btn>
     </v-form>
   </v-sheet>
@@ -45,8 +45,8 @@ const emits = defineEmits(['login']);
 
 const canShowPassword = ref<boolean>(false);
 
-const errorMessageName = computed<string>(() => props.errors ? 'Возможно имя неверное' : '');
-const errorMessagePassword = computed<string>(() => props.errors ? 'Или пароль неправельный' : '');
+const errorMessageName = computed<string>(() => props.errors ? 'Probably name is incorrect' : '');
+const errorMessagePassword = computed<string>(() => props.errors ? 'Or password incorrect too' : '');
 
 // const previousAttempts = [];
 
@@ -54,14 +54,14 @@ const userName = ref('geom');
 const userNameRules =
   (value: string) => {
     if (value?.length > 3) { return true; }
-    return 'Количество символов меньше 4';
+    return 'Length is less than 4';
   };
 
 const userPassword = ref('987');
 const userPasswordRules =
   (value: string) => {
     if (!/[^0-9]/.test(value) && value?.length > 2) { return true; }
-    return 'Пароль меньше 2 чисел';
+    return 'Password is less then 2';
   };
 
 const onLogin = () => emits('login', { username: userName.value, password: userPassword.value });

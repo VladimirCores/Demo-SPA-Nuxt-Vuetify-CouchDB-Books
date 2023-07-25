@@ -10,7 +10,7 @@
     <v-list density="compact" :lines="false">
       <v-list-item
         v-for="(item, i) in [
-          { text: 'Выйти', icon: 'mdi-exit-to-app', onClick: onLogoutClick },
+          { text: 'Logout', icon: 'mdi-exit-to-app', onClick: onLogoutClick },
         ]"
         :key="i"
         :value="item"

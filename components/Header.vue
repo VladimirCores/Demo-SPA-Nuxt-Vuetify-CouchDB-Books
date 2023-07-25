@@ -23,7 +23,7 @@
       :to="Routes.LOGIN"
       variant="outlined"
     >
-      Логин
+      Login
     </v-btn>
     <template v-else>
       <HeaderUserProfile />
