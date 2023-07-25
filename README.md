@@ -27,4 +27,6 @@
 9. Open running application [http://localhost:3000/](http://localhost:3000/) use username - `geom`, password `987`
 10. ENJOY
 
+You can also run CouchDB in Docker / Podman container, here is how: [https://hub.docker.com/_/couchdb](https://hub.docker.com/_/couchdb)
+
 P.S> Books data should have fields: title and author, and you can get JSON array from [here](https://github.com/benoitvallon/100-best-books/blob/master/books.json)  
