@@ -3,7 +3,10 @@
     <div class="d-flex w-50 justify-space-between align-center">
       <div class="d-flex align-center">
         <v-icon icon="mdi-book-open-outline" />
-        <b class="ml-2">{{ booksSkip }} - {{ booksAmount }}</b>
+        <b class="ml-2">
+          <span v-if="booksAmount > 0">{{ booksSkip }} - {{ booksSkip + ITEMS_PER_PAGE }} ({{ booksAmount }})</span>
+          <span v-else>У вас нет загруженных книжек</span>
+        </b>
         <v-progress-circular
           v-if="isBooksLoading"
           indeterminate
@@ -14,32 +17,33 @@
         />
       </div>
       <v-btn-group
+        v-if="hasBooks"
         density="compact"
         rounded
         variant="flat"
         color="primary"
       >
-        <v-btn :disabled="booksSkip === 0 || isBooksLoading" @click="currentPageIndex--">
+        <v-btn :disabled="booksSkip === 0 || isBooksLoading" @click="booksPage--">
           Prev
         </v-btn>
-        <v-btn :disabled="currentPageIndex === booksPages || isBooksLoading" @click="currentPageIndex++">
+        <v-btn :disabled="booksPage === booksPages || isBooksLoading" @click="booksPage++">
           Next
         </v-btn>
       </v-btn-group>
     </div>
-    <div v-if="booksAmount > 0" class="d-flex flex-row h-100 pb-16 justify-start align-center">
+    <div v-if="hasBooks" class="d-flex flex-row h-100 pb-16 justify-start align-center">
       <v-list class="flex-col w-50">
         <v-list-item
           v-for="(book, i) in books"
           :key="book"
-          :disabled="book.id === selectedBook?.id"
+          :color="book.id === selectedBook?.id ? 'primary' : 'black'"
+          :disabled="book.id === selectedBook?.id || isBooksLoading"
           @click="onBookItemClick(book)"
         >
-          {{ booksSkip + i + 1 }}. <b>{{ book.doc.title }}</b> <small>by {{ book.doc.author }}</small>
+          {{ pageStartIndex + i }}. <b>{{ book.doc.title }}</b> <small>by {{ book.doc.author }}</small>
         </v-list-item>
       </v-list>
       <v-sheet
-        ref="domBookWiki"
         class="flex-col h-100 w-50 mt-4"
         style="border-left: 1px solid #eee"
         elevation="0"
@@ -56,7 +60,8 @@
     </div>
     <UploadBooks
       v-else
-      class="d-flex flex-row py-2"
+      :is-uploading="isBooksUploading"
+      class="d-flex flex-row py-2 align-center h-100"
       @upload="onUploadBooks"
     />
   </div>
@@ -70,59 +75,70 @@
   />
 </template>
 <script setup lang="ts">
-import Databases from '~/constants/Databases';
 import UploadBooks from '~/components/pages/books/UploadBooks.vue';
 
 const router = useRouter();
 
-const selectedBook = ref(null);
-const itemsPerPage = ref(10);
-const isPageReady = ref(false);
-const isBooksLoading = ref(true);
-const domBookWiki = ref(null);
+const ITEMS_PER_PAGE = 10;
 
-const booksAmount = useState<number>('booksAmount');
-const currentPageIndex = useState<number>('booksPage', () => {
-  const pageIndexFromRoute = parseInt(router.currentRoute.value.query.page?.toString() || '1') - 1;
-  return pageIndexFromRoute < 0 ? 0 : pageIndexFromRoute;
+const isPageReady = ref(false);
+const isBooksUploading = ref(false);
+const pageStartIndex = ref(1);
+
+const {
+  books,
+  amount: booksAmount,
+  selected: selectedBook,
+  load,
+  upload,
+  has: hasBooks,
+  isLoading: isBooksLoading,
+} = useBooks();
+
+const booksPage = useState<number>('booksPage', () => {
+  const { query } = router.currentRoute.value;
+  const pageFromQuery = query.page?.toString() || '1';
+  const pageIndexFromRoute = parseInt(pageFromQuery);
+  return pageIndexFromRoute <= 0 ? 0 : pageIndexFromRoute - 1;
 });
 
-const booksSkip = computed(() => currentPageIndex.value * itemsPerPage.value);
-const booksPages = computed(() => Math.floor((booksAmount.value - 1) / itemsPerPage.value));
+const booksPages = computed(() => ITEMS_PER_PAGE > 0 ? Math.floor((booksAmount.value - 1) / ITEMS_PER_PAGE) : 0);
+const booksSkip = computed(() => booksPage.value * ITEMS_PER_PAGE);
 
-const db = useNuxtApp().$connect(Databases.BOOKS);
-
-const loadBooks = () => {
-  isBooksLoading.value = true;
-  return db.info()
-    .then((result: any) => {
-      booksAmount.value = result.doc_count;
-      if (currentPageIndex.value > booksPages.value) {
-        currentPageIndex.value = booksPages.value;
-      }
-    })
-    .then(() => db.allDocs({ limit: itemsPerPage.value, skip: booksSkip.value, include_docs: true }))
-    .then((result: any) => books.value = result.rows)
-    .then(() => router.replace({ ...router.currentRoute, query: { page: currentPageIndex.value + 1 } }))
-    .finally(() => {
-      isBooksLoading.value = false;
-      if (!isPageReady.value) { isPageReady.value = true; }
-    });
+const updateRouteQueryPageIndex = () => {
+  const query = booksPages.value >= 0 ? { page: booksPage.value + 1 } : {};
+  router.replace({ ...router.currentRoute, query });
+};
+const updatePageStartIndex = () => {
+  pageStartIndex.value = booksSkip.value + 1;
+};
+const loadBooks = async() => {
+  await load(ITEMS_PER_PAGE, booksSkip.value)
+    .then(updateRouteQueryPageIndex)
+    .then(updatePageStartIndex);
 };
 
-const books = useState('books', () => loadBooks());
 const onUploadBooks = async(value: any[]) => {
-  console.log('> BooksPage -> onUploadBooks');
-  await db.bulkDocs(value).then(loadBooks);
+  console.log('> BooksPage -> onUploadBooks', value);
+  isBooksUploading.value = true;
+  await upload(value).then(loadBooks).then(updateRouteQueryPageIndex);
+  isBooksUploading.value = false;
 };
 const onBookItemClick = (book: any) => {
   console.log('> BooksPage -> onBookItemClick', book.doc.link);
   selectedBook.value = book;
 };
-const stopWatchPageIndex = watch(currentPageIndex, loadBooks);
+
+const stopWatchPageIndex = watch(booksPage, loadBooks);
+
 onMounted(() => {
-  isBooksLoading.value = !books.value;
-  isPageReady.value = !!books.value;
+  const makeReady = () => Promise
+    .resolve(isPageReady.value = true)
+    .then(updateRouteQueryPageIndex)
+    .then(updatePageStartIndex);
+  if (!books.value) {
+    loadBooks().then(makeReady);
+  } else { makeReady(); }
 });
 onUnmounted(() => stopWatchPageIndex());
 </script>

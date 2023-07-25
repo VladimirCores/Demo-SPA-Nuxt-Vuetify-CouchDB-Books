@@ -7,8 +7,8 @@
     >
     <v-btn
       block
-      variant="text"
-      :loading="isBooksUploading"
+      variant="plain"
+      :loading="isUploading"
       @click="onUploadBooks"
     >
       Upload
@@ -17,8 +17,8 @@
 </template>
 <script setup lang="ts">
 const domInputFile = ref(null);
-const isBooksUploading = ref(false);
 const emits = defineEmits(['upload']);
+defineProps<{ isUploading: boolean }>();
 const onUploadBooks = () => {
   console.log('> UploadBooks -> onUploadBooks');
   const input = (domInputFile.value! as HTMLInputElement);
@@ -27,13 +27,11 @@ const onUploadBooks = () => {
     const selectedFile = fileList[0];
     console.log('> UploadBooks -> selectedFile:', selectedFile);
     const reader = new FileReader();
-    isBooksUploading.value = true;
-    reader.onload = async() => {
+    reader.onload = () => {
       const books = JSON.parse(reader.result! as string);
       console.log('> UploadBooks -> onUploadBooks - selectedFile:', books);
-      await emits('upload', books);
+      emits('upload', books);
       reader.onload = null;
-      isBooksUploading.value = false;
     };
     reader.readAsText(selectedFile);
     input.onchange = null;
