@@ -106,7 +106,7 @@ const booksPages = computed(() => ITEMS_PER_PAGE > 0 ? Math.floor((booksAmount.v
 const booksSkip = computed(() => booksPage.value * ITEMS_PER_PAGE);
 
 const updateRouteQueryPageIndex = () => {
-  const query = booksPages.value >= 0 ? { page: booksPage.value + 1 } : {};
+  const query = booksPages.value >= 0 && hasBooks.value ? { page: booksPage.value + 1 } : {};
   router.replace({ ...router.currentRoute, query });
 };
 const updatePageStartIndex = () => {
