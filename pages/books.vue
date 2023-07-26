@@ -5,7 +5,7 @@
         <v-icon icon="mdi-book-open-outline" />
         <b class="ml-2">
           <span v-if="booksAmount > 0">{{ booksSkip }} - {{ booksSkip + ITEMS_PER_PAGE }} ({{ booksAmount }})</span>
-          <span v-else>У вас нет загруженных книжек</span>
+          <span v-else>There are no uploaded books</span>
         </b>
         <v-progress-circular
           v-if="isBooksLoading"
