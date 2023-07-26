@@ -16,49 +16,29 @@
           class="ml-4"
         />
       </div>
-      <v-btn-group
+      <BooksListNavigation
         v-if="hasBooks"
-        density="compact"
-        rounded
-        variant="flat"
-        color="primary"
-      >
-        <v-btn :disabled="booksSkip === 0 || isBooksLoading" @click="booksPage--">
-          Prev
-        </v-btn>
-        <v-btn :disabled="booksPage === booksPages || isBooksLoading" @click="booksPage++">
-          Next
-        </v-btn>
-      </v-btn-group>
+        :can-prev="booksSkip === 0 || isBooksLoading"
+        :can-next="booksPage === booksPages || isBooksLoading"
+        @prev="booksPage--"
+        @next="booksPage++"
+      />
     </div>
     <div v-if="hasBooks" class="d-flex flex-row h-100 pb-16 justify-start align-center">
-      <v-list class="flex-col w-50">
-        <v-list-item
-          v-for="(book, i) in books"
-          :key="book"
-          :color="book.id === selectedBook?.id ? 'primary' : 'black'"
-          :disabled="book.id === selectedBook?.id || isBooksLoading"
-          @click="onBookItemClick(book)"
-        >
-          {{ pageStartIndex + i }}. <b>{{ book.doc.title }}</b> <small>by {{ book.doc.author }}</small>
-        </v-list-item>
-      </v-list>
-      <v-sheet
+      <BooksList
+        :books="books"
+        :is-loading="isBooksLoading"
+        :start-index="pageStartIndex"
+        :selected-book="selectedBook"
+        @selected="onBookSelected"
+      />
+      <BookWiki
         class="flex-col h-100 w-50 mt-4"
         style="border-left: 1px solid #eee"
-        elevation="0"
-      >
-        <iframe
-          v-if="selectedBook"
-          :src="selectedBook.doc.link"
-          width="100%"
-          height="100%"
-          frameborder="0"
-          scrolling="yes"
-        />
-      </v-sheet>
+        :selected-book="selectedBook"
+      />
     </div>
-    <UploadBooks
+    <BooksUpload
       v-else
       :is-uploading="isBooksUploading"
       class="d-flex flex-row py-2 align-center h-100"
@@ -75,7 +55,10 @@
   />
 </template>
 <script setup lang="ts">
-import UploadBooks from '~/components/pages/books/UploadBooks.vue';
+import BooksUpload from '~/components/pages/books/BooksUpload.vue';
+import BooksList from '~/components/pages/books/BooksList.vue';
+import BookWiki from '~/components/pages/books/BookWiki.vue';
+import BooksListNavigation from '~/components/pages/books/BooksListNavigation.vue';
 
 const router = useRouter();
 
@@ -117,14 +100,13 @@ const loadBooks = async() => {
     .then(updateRouteQueryPageIndex)
     .then(updatePageStartIndex);
 };
-
 const onUploadBooks = async(value: any[]) => {
   console.log('> BooksPage -> onUploadBooks', value);
   isBooksUploading.value = true;
   await upload(value).then(loadBooks).then(updateRouteQueryPageIndex);
   isBooksUploading.value = false;
 };
-const onBookItemClick = (book: any) => {
+const onBookSelected = (book: any) => {
   console.log('> BooksPage -> onBookItemClick', book.doc.link);
   selectedBook.value = book;
 };
@@ -142,5 +124,3 @@ onMounted(() => {
 });
 onUnmounted(() => stopWatchPageIndex());
 </script>
-<style scoped>
-</style>
